@@ -44,6 +44,8 @@ export default function MealPlanner({ profile, currentPlan, onClearPlan, isGener
   const [checkedGroceries, setCheckedGroceries] = useState<Record<string, boolean>>({});
   // Track completed cooking steps (by unique key: mealId-index or step-index)
   const [completedSteps, setCompletedSteps] = useState<Record<string, boolean>>({});
+  // Track swapped/cheaper alternative ingredients
+  const [swappedIngredients, setSwappedIngredients] = useState<Record<string, { name: string; price: number }>>({});
   // Currently expanded meal card for viewing details/steps
   const [expandedMealId, setExpandedMealId] = useState<string | null>(null);
 
@@ -88,9 +90,9 @@ export default function MealPlanner({ profile, currentPlan, onClearPlan, isGener
       });
 
       // 4. Budget fit helper (so it favors cheaper if budget is tight, else doesn't penalize much)
-      if (profile.maxBudget < 20) {
-        if (meal.estimatedCost > 8) score -= 8;
-        else if (meal.estimatedCost < 4) score += 4;
+      if (profile.maxBudget < 250) {
+        if (meal.estimatedCost > 100) score -= 8;
+        else if (meal.estimatedCost < 50) score += 4;
       }
 
       return { meal, score, matchesCount };
@@ -112,6 +114,7 @@ export default function MealPlanner({ profile, currentPlan, onClearPlan, isGener
     // Reset checked items to make it clean on new plans
     setCheckedGroceries({});
     setCompletedSteps({});
+    setSwappedIngredients({});
   }, [profile, scoredMeals, currentPlan]);
 
   // Extract selected meals for standard/offline mode
@@ -149,13 +152,20 @@ export default function MealPlanner({ profile, currentPlan, onClearPlan, isGener
       // AI plan grocery list (pre-categorized from server payload)
       return currentPlan.groceryList.map(category => ({
         category: category.category,
-        items: category.items.map(item => ({
-          name: item.name,
-          amount: item.amount,
-          estimatedPrice: item.estimatedPrice,
-          substitution: item.substitution,
-          isCompleted: checkedGroceries[`ai-${category.category}-${item.name}`] || false
-        }))
+        items: category.items.map(item => {
+          const lowerName = item.name.toLowerCase();
+          const swap = swappedIngredients[lowerName] || swappedIngredients[item.name.toLowerCase().replace(/ \(.+?\)/g, '')] || null;
+          return {
+            name: swap ? swap.name : item.name,
+            amount: item.amount,
+            estimatedPrice: swap ? swap.price : item.estimatedPrice,
+            substitution: item.substitution,
+            isCompleted: checkedGroceries[`ai-${category.category}-${item.name}`] || false,
+            isSwapped: !!swap,
+            originalName: item.name,
+            originalPrice: item.estimatedPrice
+          };
+        })
       }));
     }
 
@@ -182,7 +192,7 @@ export default function MealPlanner({ profile, currentPlan, onClearPlan, isGener
           }
         } else {
           // Mock simple estimated price and substitution
-          const estPrice = parseFloat((1.5 + Math.random() * 4.5).toFixed(2));
+          const estPrice = Math.floor(10 + Math.random() * 60);
           itemsMap[category].push({
             name: ing.name,
             amount: ing.amount,
@@ -196,12 +206,21 @@ export default function MealPlanner({ profile, currentPlan, onClearPlan, isGener
 
     return Object.keys(itemsMap).map(category => ({
       category,
-      items: itemsMap[category].map(item => ({
-        ...item,
-        isCompleted: checkedGroceries[`std-${category}-${item.name}`] || false
-      }))
+      items: itemsMap[category].map(item => {
+        const lowerName = item.name.toLowerCase();
+        const swap = swappedIngredients[lowerName] || swappedIngredients[item.name.toLowerCase().replace(/ \(.+?\)/g, '')] || null;
+        return {
+          ...item,
+          name: swap ? swap.name : item.name,
+          estimatedPrice: swap ? swap.price : item.estimatedPrice,
+          isCompleted: checkedGroceries[`std-${category}-${item.name}`] || false,
+          isSwapped: !!swap,
+          originalName: item.name,
+          originalPrice: item.estimatedPrice
+        };
+      })
     }));
-  }, [currentPlan, selectedOfflineMeals, profile.ingredientsToUse, checkedGroceries]);
+  }, [currentPlan, selectedOfflineMeals, profile.ingredientsToUse, checkedGroceries, swappedIngredients]);
 
   // Compile sequenced To-Do list / Cooking Steps
   const compiledCookingSteps = useMemo(() => {
@@ -244,17 +263,17 @@ export default function MealPlanner({ profile, currentPlan, onClearPlan, isGener
     return steps;
   }, [currentPlan, selectedOfflineMeals, completedSteps]);
 
+  // Total calculated cost of the grocery list
+  const totalGroceryCost = useMemo(() => {
+    return compiledGroceryList.reduce((acc, cat) => {
+      return acc + cat.items.reduce((sum, item) => sum + (item.estimatedPrice || 0), 0);
+    }, 0);
+  }, [compiledGroceryList]);
+
   // Total daily cost of active plan
   const totalCost = useMemo(() => {
-    if (currentPlan) {
-      return currentPlan.mealPlan.breakfast.cost + 
-             currentPlan.mealPlan.lunch.cost + 
-             currentPlan.mealPlan.dinner.cost;
-    }
-    return selectedOfflineMeals.breakfast.estimatedCost + 
-           selectedOfflineMeals.lunch.estimatedCost + 
-           selectedOfflineMeals.dinner.estimatedCost;
-  }, [currentPlan, selectedOfflineMeals]);
+    return totalGroceryCost;
+  }, [totalGroceryCost]);
 
   // Total grocery item count
   const totalGroceryItems = useMemo(() => {
@@ -293,10 +312,10 @@ export default function MealPlanner({ profile, currentPlan, onClearPlan, isGener
   let budgetIcon = <ThumbsUp className="w-5 h-5 text-emerald-600" />;
 
   if (budgetRatio > 1.0) {
-    budgetColorClass = "text-rose-600 bg-rose-50 border-rose-100";
-    budgetProgressColor = "bg-rose-500";
+    budgetColorClass = "text-red-700 bg-red-50 border-red-200";
+    budgetProgressColor = "bg-red-500";
     budgetBadgeText = "Over Budget Spending";
-    budgetIcon = <AlertTriangle className="w-5 h-5 text-rose-600 animate-pulse" />;
+    budgetIcon = <AlertTriangle className="w-5 h-5 text-red-600 animate-pulse" />;
   } else if (budgetRatio > 0.85) {
     budgetColorClass = "text-amber-600 bg-amber-50 border-amber-100";
     budgetProgressColor = "bg-amber-500";
@@ -313,6 +332,69 @@ export default function MealPlanner({ profile, currentPlan, onClearPlan, isGener
       )
     ).length;
   };
+
+  // Helper for budget swap-out to low-cost Indian alternatives
+  const getCheapAlternative = (originalName: string, originalPrice: number) => {
+    const nameLower = originalName.toLowerCase();
+    if (nameLower.includes('paneer') || nameLower.includes('cheese')) {
+      return { name: 'Soya Chunks (Protein Rich)', price: Math.max(10, Math.floor(originalPrice * 0.25)) };
+    }
+    if (nameLower.includes('chicken') || nameLower.includes('meat') || nameLower.includes('seafood')) {
+      return { name: 'Potatoes (Aloo)', price: Math.max(15, Math.floor(originalPrice * 0.2)) };
+    }
+    if (nameLower.includes('ghee') || nameLower.includes('butter')) {
+      return { name: 'Refined Vegetable Oil', price: Math.max(10, Math.floor(originalPrice * 0.3)) };
+    }
+    if (nameLower.includes('curd') || nameLower.includes('dahi') || nameLower.includes('cream')) {
+      return { name: 'Water / Lemon juice mix', price: 5 };
+    }
+    if (nameLower.includes('almond') || nameLower.includes('cashew') || nameLower.includes('nuts')) {
+      return { name: 'Peanuts (Moongfali)', price: Math.max(10, Math.floor(originalPrice * 0.25)) };
+    }
+    return {
+      name: `Local Brand ${originalName}`,
+      price: Math.max(8, Math.floor(originalPrice * 0.5))
+    };
+  };
+
+  // Identify non-swapped expensive items that can be optimized
+  const expensiveItems = useMemo(() => {
+    const allItems: { name: string; category: string; estimatedPrice: number; originalName: string; isSwapped: boolean }[] = [];
+    compiledGroceryList.forEach(cat => {
+      cat.items.forEach(item => {
+        if (!item.isSwapped) {
+          allItems.push({
+            name: item.name,
+            category: cat.category,
+            estimatedPrice: item.estimatedPrice,
+            originalName: item.originalName,
+            isSwapped: item.isSwapped
+          });
+        }
+      });
+    });
+    // Sort descending by price to find the ones causing the overage
+    return allItems.sort((a, b) => b.estimatedPrice - a.estimatedPrice);
+  }, [compiledGroceryList]);
+
+  const handleSwapIngredients = (itemsToSwap: { name: string; originalName: string; estimatedPrice: number }[]) => {
+    const updates: Record<string, { name: string; price: number }> = {};
+    itemsToSwap.forEach(item => {
+      const lowerOriginal = item.originalName.toLowerCase();
+      const alt = getCheapAlternative(item.originalName, item.estimatedPrice);
+      updates[lowerOriginal] = alt;
+    });
+
+    setSwappedIngredients(prev => ({
+      ...prev,
+      ...updates
+    }));
+  };
+
+  // Cooking progress calculation
+  const totalStepsCount = compiledCookingSteps.length;
+  const completedStepsCount = compiledCookingSteps.filter(s => s.isCompleted).length;
+  const stepsCompletionPercentage = totalStepsCount > 0 ? Math.round((completedStepsCount / totalStepsCount) * 100) : 0;
 
   if (isGenerating) {
     return (
@@ -411,12 +493,12 @@ export default function MealPlanner({ profile, currentPlan, onClearPlan, isGener
                   <Sparkles className="w-3.5 h-3.5" /> AI Chef Note:
                 </span>
                 <p className="text-xs text-stone-700 leading-relaxed">
-                  These custom-calculated meals utilize your ingredients <strong>{profile.ingredientsToUse.join(", ")}</strong> and mathematically fit your max budget of <strong>${profile.maxBudget}</strong>. Substitutions are provided for key items.
+                  These custom-calculated meals utilize your ingredients <strong>{profile.ingredientsToUse.join(", ")}</strong> and mathematically fit your max budget of <strong>₹{profile.maxBudget}</strong>. Substitutions are provided for key items.
                 </p>
               </div>
             ) : (
               <p className="text-xs text-stone-600 leading-relaxed">
-                Using our local sandbox directory database to pair egg bowls, garlic skillet hash, avocado-cream pasta, or Tuscan recipes based on your time constraints. Select <strong>Generate Daily Plan</strong> in the wizard to activate bespoke AI recommendations.
+                Using our local sandbox database of Indian favorites to pair Kanda Poha, Aloo Paratha, Upma, Dal Khichdi, or Paneer Sabzi based on your time constraints. Select <strong>Generate Daily Plan</strong> in the wizard to activate bespoke AI recommendations.
               </p>
             )}
           </div>
@@ -431,45 +513,109 @@ export default function MealPlanner({ profile, currentPlan, onClearPlan, isGener
 
         {/* Budget Feasibility Indicator Card */}
         <div className={`rounded-2xl border p-5 shadow-sm flex flex-col justify-between transition-all duration-300 ${budgetColorClass}`}>
-          <div className="flex justify-between items-start">
-            <div>
-              <span className="text-[10px] uppercase font-bold tracking-widest block opacity-75">
-                Budget Feasibility
-              </span>
-              <h4 className="text-base font-bold tracking-tight mt-0.5">
-                {budgetBadgeText}
-              </h4>
+          <div>
+            <div className="flex justify-between items-start">
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-widest block opacity-75">
+                  Budget Feasibility
+                </span>
+                <h4 className="text-base font-bold tracking-tight mt-0.5">
+                  {budgetBadgeText}
+                </h4>
+              </div>
+              <div className="p-1.5 bg-white rounded-lg shadow-sm">
+                {budgetIcon}
+              </div>
             </div>
-            <div className="p-1.5 bg-white rounded-lg shadow-sm">
-              {budgetIcon}
+
+            {/* Budget Visual Meter */}
+            <div className="my-3.5 space-y-1.5">
+              <div className="flex justify-between items-end text-xs font-mono">
+                <span className="opacity-80">Daily Cost: <strong className="font-bold">₹{totalCost}</strong></span>
+                <span className="font-bold">{Math.round(budgetRatio * 100)}% of max</span>
+              </div>
+              <div className="w-full h-2.5 bg-white/60 rounded-full overflow-hidden">
+                <motion.div 
+                  className={`h-full ${budgetProgressColor}`}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${Math.min(budgetRatio * 100, 100)}%` }}
+                  transition={{ duration: 0.5, ease: 'easeOut' }}
+                />
+              </div>
+            </div>
+
+            <div className="text-xs font-medium leading-normal opacity-90 mb-1">
+              {isOverBudget ? (
+                <p>⚠️ Over limit by <span className="font-bold">₹{Math.abs(budgetDifference)}</span>. Try adjusting your profile limits or budget setting.</p>
+              ) : (
+                <p>🎉 Saving <span className="font-bold">₹{budgetDifference}</span> today! You are perfectly within your daily spending range.</p>
+              )}
             </div>
           </div>
 
-          {/* Budget Visual Meter */}
-          <div className="my-3.5 space-y-1.5">
-            <div className="flex justify-between items-end text-xs font-mono">
-              <span className="opacity-80">Daily Cost: <strong className="font-bold">${totalCost.toFixed(2)}</strong></span>
-              <span className="font-bold">{Math.round(budgetRatio * 100)}% of max</span>
+          {isOverBudget && expensiveItems.length > 0 && (
+            <div className="mt-4 pt-3.5 border-t border-red-200/30 text-xs space-y-2.5">
+              <p className="font-semibold text-red-900 bg-red-100/80 px-2 py-1 rounded border border-red-200/50">
+                🚨 Budget overage driven by these premium ingredients:
+              </p>
+              <div className="space-y-1.5 max-h-[85px] overflow-y-auto pl-1">
+                {expensiveItems.slice(0, 3).map((item, idx) => (
+                  <div key={idx} className="flex justify-between text-[11px] font-medium text-red-950">
+                    <span>• {item.name}</span>
+                    <span>₹{item.estimatedPrice}</span>
+                  </div>
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={() => handleSwapIngredients(expensiveItems.slice(0, 3))}
+                className="w-full text-center bg-red-600 hover:bg-red-700 text-white font-bold text-[11px] py-1.5 px-2 rounded-lg transition-colors shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <Sparkles className="w-3 h-3" /> Auto-Swap for Cheap Alternatives
+              </button>
             </div>
-            <div className="w-full h-2.5 bg-white/60 rounded-full overflow-hidden">
-              <motion.div 
-                className={`h-full ${budgetProgressColor}`}
-                initial={{ width: 0 }}
-                animate={{ width: `${Math.min(budgetRatio * 100, 100)}%` }}
-                transition={{ duration: 0.5, ease: 'easeOut' }}
-              />
-            </div>
-          </div>
-
-          <div className="text-xs font-medium leading-normal opacity-90">
-            {isOverBudget ? (
-              <p>⚠️ Over limit by <span className="font-bold">${Math.abs(budgetDifference).toFixed(2)}</span>. Try adjusting your profile limits or budget setting.</p>
-            ) : (
-              <p>🎉 Saving <span className="font-bold">${budgetDifference.toFixed(2)}</span> today! You are perfectly within your daily spending range.</p>
-            )}
-          </div>
+          )}
         </div>
       </div>
+
+      {/* Daily Completion Progress Bar */}
+      {compiledCookingSteps.length > 0 && (
+        <div className="bg-gradient-to-r from-amber-500/10 to-emerald-500/10 rounded-2xl border border-amber-500/20 p-4.5 shadow-xs">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-2">
+            <div className="space-y-0.5">
+              <h4 className="text-xs uppercase font-bold tracking-wider text-stone-700 flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Daily Cooking Tasks Progress
+              </h4>
+              <p className="text-[11px] text-stone-500">
+                Tick off instructions on the Daily Prep To-Do List to track cooking progress.
+              </p>
+            </div>
+            <div className="text-right flex items-baseline gap-1">
+              <span className="text-lg font-mono font-black text-emerald-700">{stepsCompletionPercentage}%</span>
+              <span className="text-[10px] text-stone-400 font-bold uppercase tracking-wider">Completed</span>
+            </div>
+          </div>
+          
+          <div className="relative w-full h-3 bg-stone-200/60 rounded-full overflow-hidden shadow-inner">
+            <motion.div 
+              className="h-full bg-gradient-to-r from-amber-500 to-emerald-500 rounded-full"
+              initial={{ width: 0 }}
+              animate={{ width: `${stepsCompletionPercentage}%` }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+            />
+          </div>
+          
+          {stepsCompletionPercentage === 100 && (
+            <motion.div 
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-2 text-center text-xs font-bold text-emerald-800 flex items-center justify-center gap-1 bg-emerald-50 py-1 rounded-md border border-emerald-100"
+            >
+              🎉 Fantastic! You have completed all cooking tasks for today. Enjoy your delicious Indian meals!
+            </motion.div>
+          )}
+        </div>
+      )}
 
       {/* Main Grid: Left Column (Meal Cards), Right Column (Shopping & To-Do List) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -551,7 +697,7 @@ export default function MealPlanner({ profile, currentPlan, onClearPlan, isGener
                     <div className="flex md:flex-col items-center md:items-end justify-between md:justify-center border-t md:border-t-0 pt-3.5 md:pt-0 border-stone-100 gap-2 shrink-0">
                       <div className="text-left md:text-right">
                         <span className="text-[10px] text-stone-400 block uppercase font-bold tracking-wider">Est. Cost</span>
-                        <span className="text-base font-mono font-bold text-stone-900">${mealCost.toFixed(2)}</span>
+                        <span className="text-base font-mono font-bold text-stone-900">₹{mealCost}</span>
                       </div>
 
                       <div className="flex gap-1.5">
@@ -713,15 +859,38 @@ export default function MealPlanner({ profile, currentPlan, onClearPlan, isGener
                               }`}>
                                 {item.isCompleted && <Check className="w-3 h-3 stroke-[3]" />}
                               </div>
-                              <span className={`text-xs font-semibold ${item.isCompleted ? 'line-through text-stone-400' : 'text-stone-800'}`}>
-                                {item.name}
-                              </span>
+                              <div className="flex flex-col">
+                                <span className={`text-xs font-semibold ${item.isCompleted ? 'line-through text-stone-400' : 'text-stone-800'}`}>
+                                  {item.name}
+                                </span>
+                                {item.isSwapped && (
+                                  <span className="text-[9px] text-amber-600 font-bold flex items-center gap-1 mt-0.5">
+                                    ✨ Cheaper Swap
+                                    <button
+                                      type="button"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        const lowerOriginal = item.originalName.toLowerCase();
+                                        setSwappedIngredients(prev => {
+                                          const next = { ...prev };
+                                          delete next[lowerOriginal];
+                                          return next;
+                                        });
+                                      }}
+                                      className="text-stone-400 hover:text-red-500 underline ml-1 cursor-pointer font-bold"
+                                      title="Restore original ingredient and price"
+                                    >
+                                      (Undo)
+                                    </button>
+                                  </span>
+                                )}
+                              </div>
                             </button>
 
                             <div className="flex items-center gap-2 font-mono text-[10px]">
                               <span className="text-stone-500 font-bold">{item.amount}</span>
                               <span className="text-emerald-700 font-semibold bg-emerald-50 px-1 py-0.5 rounded border border-emerald-100/50">
-                                ${item.estimatedPrice.toFixed(2)}
+                                ₹{item.estimatedPrice}
                               </span>
                             </div>
                           </div>

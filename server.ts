@@ -130,35 +130,36 @@ app.post("/api/generate-plan", async (req, res) => {
     ? ingredientsToUse.join(", ") 
     : "none specified";
 
-  const systemInstruction = `You are an elite Michelin-star personal chef and meal planning algorithms designer.
-Your goal is to build a highly customized, exact meal plan comprising Breakfast, Lunch, and Dinner.
+  const systemInstruction = `You are an elite personal chef specializing in authentic Indian home cooking and meal planning algorithms.
+Your goal is to build a highly customized, exact Indian meal plan comprising Breakfast, Lunch, and Dinner.
+Focus on traditional Indian comfort foods and ingredients (e.g., Poha, Upma, Idli, Dosa, Roti-Sabji, Dal, Khichdi, Chole, Paneer, Egg Bhurji, Paratha, Pulav, Biryani, etc.). Avoid western processed ingredients like heavy cheese, cream cheese, avocado, bacon unless explicitly mentioned in the pantry items to use.
 The meal plan must STRICTLY fit within the following physical and financial user constraints:
 - Breakfast Cooking Time: max ${timeBreakfast} minutes.
 - Lunch Cooking Time: max ${timeLunch} minutes.
 - Dinner Cooking Time: max ${timeDinner} minutes.
 - Physical Energy/Stamina Level required to cook: maximum ${energyLevel} on a scale of 1 to 5.
 - Pantry ingredients to clear and use up: ${pantryStr}. Always prioritize using these in the meals if possible!
-- Maximum Daily Cost of all ingredients combined: $${maxBudget} USD. The cumulative cost of Breakfast + Lunch + Dinner MUST NOT exceed this budget!
+- Maximum Daily Cost of all ingredients combined: ₹${maxBudget} INR (Indian Rupees). The cumulative cost of Breakfast + Lunch + Dinner MUST NOT exceed this budget!
 
 Provide the following in your JSON response structure:
 1. "mealPlan": An object with "breakfast", "lunch", and "dinner". Each meal has:
-   - "name": Aesthetic, appetizing title.
+   - "name": Aesthetic, appetizing title (e.g., "Aromatic Jeera Rice with Tadka Dal").
    - "prepTime": Number in minutes (must be <= allowed time limit).
    - "energyScore": Number 1-5 (must be <= active stamina ${energyLevel}).
-   - "cost": Number in USD representing ingredients cost.
-   - "description": Enticing description detailing flavors and why it fits their constraints.
-   - "ingredients": Array of ingredients, each with "name", "amount", and "category" (e.g. "Produce", "Dairy & Eggs", "Meat & Seafood", "Pantry").
+   - "cost": Number in INR representing ingredients cost.
+   - "description": Enticing description detailing flavor notes, spices, and why it fits their constraints.
+   - "ingredients": Array of ingredients, each with "name", "amount", and "category" (e.g. "Produce", "Dairy & Eggs", "Meat & Seafood", "Pantry", "Grains & Lentils").
    - "instructions": Chronological recipe instructions.
 2. "cookingTodoList": A combined, chronological cooking task list of instructions for the entire day with actionable timestamps.
-3. "groceryList": Categorized list of grocery items needed that are NOT already in the pantry. Group items by supermarket category. Each grocery item must have a name, amount, estimatedPrice (in USD), and a "substitution" (a smart alternative ingredient if the store is out of stock).
+3. "groceryList": Categorized list of grocery items needed that are NOT already in the pantry. Group items by supermarket category. Each grocery item must have a name, amount, estimatedPrice (in INR), and a "substitution" (a smart Indian alternative ingredient if the store is out of stock).
 
-Do not produce generic responses. Craft real, mouthwatering, practical recipes that match their criteria. Ensure all constraints are mathematically satisfied!`;
+Do not produce generic responses. Craft real, mouthwatering, practical Indian recipes that match their criteria. Ensure all constraints are mathematically satisfied!`;
 
-  const prompt = `Generate a strict JSON meal plan satisfying:
+  const prompt = `Generate a strict JSON Indian meal plan satisfying:
 Time constraints: Breakfast: ${timeBreakfast} mins, Lunch: ${timeLunch} mins, Dinner: ${timeDinner} mins.
 Energy rating: max ${energyLevel}/5.
 Maximize clearance of these pantry items: ${pantryStr}.
-Total budget limit: $${maxBudget}.`;
+Total budget limit: ₹${maxBudget} INR (Indian Rupees).`;
 
   try {
     const response = await ai.models.generateContent({
@@ -179,7 +180,7 @@ Total budget limit: $${maxBudget}.`;
                     name: { type: Type.STRING },
                     prepTime: { type: Type.INTEGER, description: "Total cooking and prep time in minutes" },
                     energyScore: { type: Type.INTEGER, description: "Energy/complexity rating from 1 to 5" },
-                    cost: { type: Type.NUMBER, description: "Estimated cost in USD" },
+                    cost: { type: Type.NUMBER, description: "Estimated cost in Indian Rupees (INR/₹)" },
                     description: { type: Type.STRING },
                     ingredients: {
                       type: Type.ARRAY,
@@ -206,7 +207,7 @@ Total budget limit: $${maxBudget}.`;
                     name: { type: Type.STRING },
                     prepTime: { type: Type.INTEGER, description: "Total cooking and prep time in minutes" },
                     energyScore: { type: Type.INTEGER, description: "Energy/complexity rating from 1 to 5" },
-                    cost: { type: Type.NUMBER, description: "Estimated cost in USD" },
+                    cost: { type: Type.NUMBER, description: "Estimated cost in Indian Rupees (INR/₹)" },
                     description: { type: Type.STRING },
                     ingredients: {
                       type: Type.ARRAY,
@@ -233,7 +234,7 @@ Total budget limit: $${maxBudget}.`;
                     name: { type: Type.STRING },
                     prepTime: { type: Type.INTEGER, description: "Total cooking and prep time in minutes" },
                     energyScore: { type: Type.INTEGER, description: "Energy/complexity rating from 1 to 5" },
-                    cost: { type: Type.NUMBER, description: "Estimated cost in USD" },
+                    cost: { type: Type.NUMBER, description: "Estimated cost in Indian Rupees (INR/₹)" },
                     description: { type: Type.STRING },
                     ingredients: {
                       type: Type.ARRAY,
@@ -282,7 +283,7 @@ Total budget limit: $${maxBudget}.`;
                       properties: {
                         name: { type: Type.STRING },
                         amount: { type: Type.STRING },
-                        estimatedPrice: { type: Type.NUMBER, description: "Estimated cost of this grocery item in USD" },
+                        estimatedPrice: { type: Type.NUMBER, description: "Estimated cost of this grocery item in Indian Rupees (INR/₹)" },
                         substitution: { type: Type.STRING, description: "An alternative ingredient if out of stock" }
                       },
                       required: ["name", "amount", "estimatedPrice", "substitution"]

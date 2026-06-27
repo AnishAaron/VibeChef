@@ -25,8 +25,8 @@ const DEFAULT_PROFILE: UserProfile = {
   timeLunch: 25,
   timeDinner: 35,
   energyLevel: 3,
-  ingredientsToUse: ['Eggs', 'Potatoes', 'Spinach'],
-  maxBudget: 25
+  ingredientsToUse: ['Eggs', 'Potatoes (Aloo)', 'Onions (Pyaz)'],
+  maxBudget: 300
 };
 
 export default function App() {
@@ -468,7 +468,7 @@ export default function App() {
                               <span className="text-stone-400">|</span>
                               
                               <span className="text-[10px] text-stone-500 font-mono">
-                                Limit: ${record.profile.maxBudget} USD
+                                Limit: ₹{record.profile.maxBudget} INR
                               </span>
                             </div>
 
@@ -477,17 +477,17 @@ export default function App() {
                               <div className="space-y-0.5">
                                 <span className="text-[9px] font-bold uppercase tracking-wider text-amber-600 block">🍳 Breakfast</span>
                                 <span className="text-xs font-bold text-stone-800 line-clamp-1">{breakfast.name}</span>
-                                <span className="text-[10px] text-stone-400 font-mono">${breakfast.cost.toFixed(2)} | {breakfast.prepTime}m</span>
+                                <span className="text-[10px] text-stone-400 font-mono">₹{breakfast.cost} | {breakfast.prepTime}m</span>
                               </div>
                               <div className="space-y-0.5">
                                 <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-600 block">🥗 Lunch</span>
                                 <span className="text-xs font-bold text-stone-800 line-clamp-1">{lunch.name}</span>
-                                <span className="text-[10px] text-stone-400 font-mono">${lunch.cost.toFixed(2)} | {lunch.prepTime}m</span>
+                                <span className="text-[10px] text-stone-400 font-mono">₹{lunch.cost} | {lunch.prepTime}m</span>
                               </div>
                               <div className="space-y-0.5">
                                 <span className="text-[9px] font-bold uppercase tracking-wider text-indigo-600 block">🍲 Dinner</span>
                                 <span className="text-xs font-bold text-stone-800 line-clamp-1">{dinner.name}</span>
-                                <span className="text-[10px] text-stone-400 font-mono">${dinner.cost.toFixed(2)} | {dinner.prepTime}m</span>
+                                <span className="text-[10px] text-stone-400 font-mono">₹{dinner.cost} | {dinner.prepTime}m</span>
                               </div>
                             </div>
                           </div>
@@ -496,7 +496,7 @@ export default function App() {
                           <div className="flex md:flex-col items-center md:items-end justify-between md:justify-center shrink-0 border-t md:border-t-0 pt-3 md:pt-0 border-stone-100 gap-3">
                             <div className="text-left md:text-right">
                               <span className="text-[10px] text-stone-400 block uppercase font-bold tracking-wider">Plan Total Cost</span>
-                              <span className="text-base font-mono font-extrabold text-stone-900">${totalHistoricalCost.toFixed(2)}</span>
+                              <span className="text-base font-mono font-extrabold text-stone-900">₹{totalHistoricalCost}</span>
                             </div>
 
                             <div className="flex items-center gap-1.5">

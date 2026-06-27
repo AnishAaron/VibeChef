@@ -4,7 +4,7 @@ import {
   Clock, 
   Zap, 
   Apple, 
-  DollarSign, 
+  IndianRupee, 
   ArrowRight, 
   ArrowLeft, 
   Check, 
@@ -28,7 +28,7 @@ const STEPS = [
   { id: 1, name: 'Time', desc: 'Cooking time', icon: Clock },
   { id: 2, name: 'Energy', desc: 'Your stamina', icon: Zap },
   { id: 3, name: 'Pantry', desc: 'Use up items', icon: Apple },
-  { id: 4, name: 'Budget', desc: 'Spending limit', icon: DollarSign },
+  { id: 4, name: 'Budget', desc: 'Spending limit', icon: IndianRupee },
 ];
 
 const ENERGY_LABELS = [
@@ -390,7 +390,7 @@ export default function SidebarWizard({
               <div className="space-y-5">
                 <div>
                   <h3 className="text-sm font-semibold text-amber-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                    <DollarSign className="w-4 h-4" /> Max Daily Budget
+                    <IndianRupee className="w-4 h-4" /> Max Daily Budget
                   </h3>
                   <p className="text-xs text-stone-300">
                     What is the absolute maximum budget for all meals today?
@@ -399,18 +399,18 @@ export default function SidebarWizard({
 
                 <div className="p-4 bg-stone-950/30 rounded-xl border border-stone-800 space-y-5">
                   <div className="flex flex-col items-center justify-center py-2">
-                    <div className="text-4xl font-mono font-bold text-amber-400 flex items-center">
-                      <span className="text-2xl text-amber-500">$</span>
-                      {profile.maxBudget.toFixed(2)}
+                    <div className="text-4xl font-mono font-bold text-amber-400 flex items-center gap-0.5">
+                      <span className="text-2xl text-amber-500">₹</span>
+                      {profile.maxBudget}
                     </div>
                     <span className="text-[10px] text-stone-400 uppercase font-semibold tracking-wider mt-1">
-                      Max Spend Allowed
+                      Max Spend Allowed (INR)
                     </span>
                   </div>
 
                   {/* Preset Values */}
                   <div className="grid grid-cols-4 gap-1.5">
-                    {[12, 18, 25, 45].map((val) => (
+                    {[150, 250, 400, 600].map((val) => (
                       <button
                         key={val}
                         type="button"
@@ -421,7 +421,7 @@ export default function SidebarWizard({
                             : 'bg-stone-800 hover:bg-stone-700 text-stone-300'
                         }`}
                       >
-                        ${val}
+                        ₹{val}
                       </button>
                     ))}
                   </div>
@@ -431,17 +431,17 @@ export default function SidebarWizard({
                     <input
                       id="budget-slider"
                       type="range"
-                      min="10"
-                      max="50"
-                      step="1"
+                      min="100"
+                      max="1200"
+                      step="25"
                       value={profile.maxBudget}
                       onChange={(e) => updateProfile('maxBudget', parseInt(e.target.value))}
                       className="w-full h-1.5 bg-stone-800 rounded-lg appearance-none cursor-pointer accent-amber-500 focus:outline-none"
                     />
                     <div className="flex justify-between text-[9px] text-stone-400 font-mono">
-                      <span>$10 (Budget-saver)</span>
-                      <span>$30</span>
-                      <span>$50 (Premium)</span>
+                      <span>₹100 (Budget-saver)</span>
+                      <span>₹600</span>
+                      <span>₹1200 (Premium)</span>
                     </div>
                   </div>
                 </div>
