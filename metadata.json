@@ -1,0 +1,6 @@
+{
+  "name": "Cooking To-Do List & Meal Planner",
+  "description": "An interactive, aesthetic single-page meal planner and cooking checklist app that compiles recipe steps, grocery items, and budget feasibility based on your daily available time, energy levels, and pantry ingredients.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
