@@ -30,9 +30,10 @@ interface MealPlannerProps {
   currentPlan: DailyPlanResponse | null;
   onClearPlan?: () => void;
   isGenerating?: boolean;
+  onEditProfile?: () => void;
 }
 
-export default function MealPlanner({ profile, currentPlan, onClearPlan, isGenerating }: MealPlannerProps) {
+export default function MealPlanner({ profile, currentPlan, onClearPlan, isGenerating, onEditProfile }: MealPlannerProps) {
   // Map of category/type to selected offline meal ID
   const [selectedMealIds, setSelectedMealIds] = useState<{ breakfast: string; lunch: string; dinner: string }>({
     breakfast: '',
@@ -463,18 +464,28 @@ export default function MealPlanner({ profile, currentPlan, onClearPlan, isGener
           </p>
         </div>
 
-        {/* Profile Tag summary */}
-        <div className="flex flex-wrap gap-1.5">
-          <span className="inline-flex items-center text-[10px] bg-stone-100 text-stone-700 font-semibold px-2 py-1 rounded-md border border-stone-200">
-            ⌛ B:{profile.timeBreakfast}m | L:{profile.timeLunch}m | D:{profile.timeDinner}m
-          </span>
-          <span className="inline-flex items-center text-[10px] bg-stone-100 text-stone-700 font-semibold px-2 py-1 rounded-md border border-stone-200">
-            ⚡ Stamina: {profile.energyLevel}/5
-          </span>
-          {profile.ingredientsToUse.length > 0 && (
-            <span className="inline-flex items-center text-[10px] bg-amber-50 text-amber-800 font-semibold px-2 py-1 rounded-md border border-amber-100">
-              🥕 Pantry: {profile.ingredientsToUse.length} items
+        {/* Profile Tag summary & Edit button */}
+        <div className="flex flex-col sm:items-end gap-2.5 shrink-0">
+          <div className="flex flex-wrap gap-1.5 justify-start sm:justify-end">
+            <span className="inline-flex items-center text-[10px] bg-stone-100 text-stone-700 font-semibold px-2 py-1 rounded-md border border-stone-200">
+              ⌛ B:{profile.timeBreakfast}m | L:{profile.timeLunch}m | D:{profile.timeDinner}m
             </span>
+            <span className="inline-flex items-center text-[10px] bg-stone-100 text-stone-700 font-semibold px-2 py-1 rounded-md border border-stone-200">
+              ⚡ Stamina: {profile.energyLevel}/5
+            </span>
+            {profile.ingredientsToUse.length > 0 && (
+              <span className="inline-flex items-center text-[10px] bg-amber-50 text-amber-800 font-semibold px-2 py-1 rounded-md border border-amber-100">
+                🥕 Pantry: {profile.ingredientsToUse.length} items
+              </span>
+            )}
+          </div>
+          {onEditProfile && (
+            <button
+              onClick={onEditProfile}
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-950 bg-amber-400 hover:bg-amber-505 hover:bg-amber-500 px-3.5 py-2 rounded-xl transition cursor-pointer shadow-sm shadow-amber-500/10 active:scale-95"
+            >
+              <ChefHat className="w-3.5 h-3.5" /> Modify Profile (Wizard)
+            </button>
           )}
         </div>
       </div>

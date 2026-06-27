@@ -330,204 +330,192 @@ export default function App() {
           </button>
         </div>
 
-        {/* Responsive Layout Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Tab content renderer - fully decoupled and separate views */}
+        <div id="planner-results-title" className="w-full space-y-6">
           
-          {/* SIDEBAR CONTAINER: Profile Input Form */}
-          <div className={`lg:col-span-4 lg:sticky lg:top-24 h-auto lg:h-[calc(100vh-8.5rem)] ${
-            activeTab === 'profile' ? 'block' : 'hidden lg:block'
-          }`}>
-            <SidebarWizard 
-              profile={profile} 
-              onChange={setProfile} 
-              onApply={handleApplyProfileOffline} 
-              onGenerateAI={handleGenerateAIPlan}
-              isGenerating={isGenerating}
-              apiKeyConfigured={apiKeyConfigured}
-            />
-          </div>
+          {/* TAB CONTENT: PROFILE FORM WIZARD */}
+          {activeTab === 'profile' && (
+            <div className="max-w-3xl mx-auto w-full">
+              <SidebarWizard 
+                profile={profile} 
+                onChange={setProfile} 
+                onApply={handleApplyProfileOffline} 
+                onGenerateAI={handleGenerateAIPlan}
+                isGenerating={isGenerating}
+                apiKeyConfigured={apiKeyConfigured}
+              />
+            </div>
+          )}
 
-          {/* MAIN RESULTS CONTAINER */}
-          <div id="planner-results-title" className="lg:col-span-8 space-y-6">
-            
-            {/* Show Alert Box for Generation Errors */}
-            {generationError && (
-              <div className="bg-rose-50 border border-rose-200 rounded-2xl p-5 flex items-start gap-4">
-                <AlertCircle className="w-6 h-6 text-rose-500 shrink-0 mt-0.5" />
-                <div className="space-y-2">
-                  <h4 className="text-sm font-bold text-rose-900">AI Personal Chef Error</h4>
-                  <p className="text-xs text-rose-700 leading-relaxed">{generationError}</p>
-                  <p className="text-[10px] text-rose-600">
-                    You can still use the <strong>Offline Fast-Match Recipes</strong> mode below to plan meals without an active API key!
-                  </p>
-                  <button
-                    onClick={handleApplyProfileOffline}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-800 bg-rose-100 hover:bg-rose-200 px-3 py-1.5 rounded-lg transition"
-                  >
-                    Switch to Offline Mode
-                  </button>
+          {/* TAB CONTENT: ACTIVE MEAL PLANNER */}
+          {activeTab === 'planner' && (
+            <div className="w-full space-y-6">
+              {/* Show Alert Box for Generation Errors */}
+              {generationError && (
+                <div className="bg-rose-50 border border-rose-200 rounded-2xl p-5 flex items-start gap-4">
+                  <AlertCircle className="w-6 h-6 text-rose-500 shrink-0 mt-0.5" />
+                  <div className="space-y-2">
+                    <h4 className="text-sm font-bold text-rose-900">AI Personal Chef Error</h4>
+                    <p className="text-xs text-rose-700 leading-relaxed">{generationError}</p>
+                    <p className="text-[10px] text-rose-600">
+                      You can still use the <strong>Offline Fast-Match Recipes</strong> mode below to plan meals without an active API key!
+                    </p>
+                    <button
+                      onClick={handleApplyProfileOffline}
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-800 bg-rose-100 hover:bg-rose-200 px-3 py-1.5 rounded-lg transition"
+                    >
+                      Switch to Offline Mode
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* TAB CONTENT: ACTIVE MEAL PLANNER */}
-            {activeTab === 'planner' && (
               <MealPlanner 
                 profile={profile} 
                 currentPlan={currentPlan}
                 onClearPlan={handleClearActivePlan}
                 isGenerating={isGenerating}
+                onEditProfile={() => setActiveTab('profile')}
               />
-            )}
+            </div>
+          )}
 
-            {/* TAB CONTENT: PROFILE FORM FOR MOBILE AS A PANEL */}
-            {activeTab === 'profile' && (
-              <div className="lg:hidden">
-                <p className="text-xs text-stone-500 mb-4 font-semibold">
-                  Adjust parameters in the left side wizard and click Apply to refresh.
-                </p>
+          {/* TAB CONTENT: HISTORICAL TIMELINE DATABASE */}
+          {activeTab === 'history' && (
+            <div className="w-full space-y-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <h2 className="text-lg font-bold tracking-tight text-stone-900 flex items-center gap-2">
+                    <History className="w-5 h-5 text-amber-500" /> User History Timeline
+                  </h2>
+                  <p className="text-xs text-stone-500">
+                    Explore your timeline of saved meal blueprints. Re-load historical profiles or delete entries.
+                  </p>
+                </div>
+                <span className="text-xs text-stone-400 font-mono font-bold bg-white px-2.5 py-1 rounded-md border border-stone-200">
+                  SCHEMA: Table (history)
+                </span>
               </div>
-            )}
 
-            {/* TAB CONTENT: HISTORICAL TIMELINE DATABASE */}
-            {activeTab === 'history' && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
+              {history.length === 0 ? (
+                <div className="bg-white rounded-2xl border border-stone-150 p-12 text-center space-y-4">
+                  <div className="w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center mx-auto">
+                    <FolderSync className="w-6 h-6 text-stone-400" />
+                  </div>
                   <div className="space-y-1">
-                    <h2 className="text-lg font-bold tracking-tight text-stone-900 flex items-center gap-2">
-                      <History className="w-5 h-5 text-amber-500" /> User History Timeline
-                    </h2>
-                    <p className="text-xs text-stone-500">
-                      Explore your timeline of saved meal blueprints. Re-load historical profiles or delete entries.
+                    <h4 className="text-sm font-bold text-stone-900">Timeline Database Empty</h4>
+                    <p className="text-xs text-stone-500 max-w-md mx-auto leading-relaxed">
+                      When you successfully generate a bespoke custom plan via the AI Personal Chef, it will automatically save right here into your history timeline.
                     </p>
                   </div>
-                  <span className="text-xs text-stone-400 font-mono font-bold bg-white px-2 py-1 rounded-md border border-stone-200">
-                    SCHEMA: Table (history)
-                  </span>
+                  <button
+                    onClick={() => setActiveTab('profile')}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-950 bg-amber-400 hover:bg-amber-500 px-4 py-2 rounded-xl transition shadow-md shadow-amber-500/10 cursor-pointer"
+                  >
+                    Configure Profile Wizard
+                  </button>
                 </div>
+              ) : (
+                <div className="relative pl-6 sm:pl-8 space-y-6 before:absolute before:left-3 sm:before:left-4 before:top-2 before:bottom-2 before:w-0.5 before:bg-stone-200">
+                  {history.map((record, index) => {
+                    const dateObj = new Date(record.createdAt);
+                    const displayDate = dateObj.toLocaleDateString(undefined, { 
+                      weekday: 'short', 
+                      month: 'short', 
+                      day: 'numeric' 
+                    });
+                    const displayTime = dateObj.toLocaleTimeString(undefined, {
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    });
 
-                {history.length === 0 ? (
-                  <div className="bg-white rounded-2xl border border-stone-150 p-12 text-center space-y-4">
-                    <div className="w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center mx-auto">
-                      <FolderSync className="w-6 h-6 text-stone-400" />
-                    </div>
-                    <div className="space-y-1">
-                      <h4 className="text-sm font-bold text-stone-900">Timeline Database Empty</h4>
-                      <p className="text-xs text-stone-500 max-w-md mx-auto leading-relaxed">
-                        When you successfully generate a bespoke custom plan via the AI Personal Chef, it will automatically save right here into your history timeline.
-                      </p>
-                    </div>
-                    <button
-                      onClick={() => setActiveTab('profile')}
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-950 bg-amber-400 hover:bg-amber-500 px-4 py-2 rounded-xl transition shadow-md shadow-amber-500/10 cursor-pointer"
-                    >
-                      Configure Profile Wizard
-                    </button>
-                  </div>
-                ) : (
-                  <div className="relative pl-6 sm:pl-8 space-y-6 before:absolute before:left-3 sm:before:left-4 before:top-2 before:bottom-2 before:w-0.5 before:bg-stone-200">
-                    {history.map((record, index) => {
-                      const dateObj = new Date(record.createdAt);
-                      const displayDate = dateObj.toLocaleDateString(undefined, { 
-                        weekday: 'short', 
-                        month: 'short', 
-                        day: 'numeric' 
-                      });
-                      const displayTime = dateObj.toLocaleTimeString(undefined, {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      });
+                    const { breakfast, lunch, dinner } = record.plan.mealPlan;
+                    const totalHistoricalCost = breakfast.cost + lunch.cost + dinner.cost;
 
-                      const { breakfast, lunch, dinner } = record.plan.mealPlan;
-                      const totalHistoricalCost = breakfast.cost + lunch.cost + dinner.cost;
+                    return (
+                      <motion.div
+                        key={record.id}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                        className="relative bg-white rounded-2xl border border-stone-150 p-5 shadow-sm hover:border-stone-300 transition-all flex flex-col md:flex-row justify-between gap-4 cursor-pointer group"
+                        onClick={() => handleRestoreHistoricalPlan(record)}
+                      >
+                        {/* Timeline dot */}
+                        <div className="absolute -left-[31px] sm:-left-[39px] top-6 w-4 h-4 rounded-full border-4 border-white bg-amber-500 shadow-sm group-hover:scale-110 transition-transform" />
 
-                      return (
-                        <motion.div
-                          key={record.id}
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.05 }}
-                          className="relative bg-white rounded-2xl border border-stone-150 p-5 shadow-sm hover:border-stone-300 transition-all flex flex-col md:flex-row justify-between gap-4 cursor-pointer group"
-                          onClick={() => handleRestoreHistoricalPlan(record)}
-                        >
-                          {/* Timeline dot */}
-                          <div className="absolute -left-[31px] sm:-left-[39px] top-6 w-4 h-4 rounded-full border-4 border-white bg-amber-500 shadow-sm group-hover:scale-110 transition-transform" />
+                        {/* Historical snapshot details */}
+                        <div className="flex-1 space-y-3">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-stone-500">
+                              <CalendarDays className="w-3.5 h-3.5" />
+                              {displayDate} at {displayTime}
+                            </span>
+                            
+                            <span className="bg-amber-100 text-amber-800 text-[10px] font-bold px-1.5 py-0.5 rounded">
+                              level {record.profile.energyLevel} Stamina
+                            </span>
 
-                          {/* Historical snapshot details */}
-                          <div className="flex-1 space-y-3">
-                            <div className="flex flex-wrap items-center gap-2">
-                              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-stone-500">
-                                <CalendarDays className="w-3.5 h-3.5" />
-                                {displayDate} at {displayTime}
-                              </span>
-                              
-                              <span className="bg-amber-100 text-amber-800 text-[10px] font-bold px-1.5 py-0.5 rounded">
-                                level {record.profile.energyLevel} Stamina
-                              </span>
-
-                              <span className="text-stone-400">|</span>
-                              
-                              <span className="text-[10px] text-stone-500 font-mono">
-                                Limit: ₹{record.profile.maxBudget} INR
-                              </span>
-                            </div>
-
-                            {/* Meals loaded summary */}
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1 border-t border-stone-100">
-                              <div className="space-y-0.5">
-                                <span className="text-[9px] font-bold uppercase tracking-wider text-amber-600 block">🍳 Breakfast</span>
-                                <span className="text-xs font-bold text-stone-800 line-clamp-1">{breakfast.name}</span>
-                                <span className="text-[10px] text-stone-400 font-mono">₹{breakfast.cost} | {breakfast.prepTime}m</span>
-                              </div>
-                              <div className="space-y-0.5">
-                                <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-600 block">🥗 Lunch</span>
-                                <span className="text-xs font-bold text-stone-800 line-clamp-1">{lunch.name}</span>
-                                <span className="text-[10px] text-stone-400 font-mono">₹{lunch.cost} | {lunch.prepTime}m</span>
-                              </div>
-                              <div className="space-y-0.5">
-                                <span className="text-[9px] font-bold uppercase tracking-wider text-indigo-600 block">🍲 Dinner</span>
-                                <span className="text-xs font-bold text-stone-800 line-clamp-1">{dinner.name}</span>
-                                <span className="text-[10px] text-stone-400 font-mono">₹{dinner.cost} | {dinner.prepTime}m</span>
-                              </div>
-                            </div>
+                            <span className="text-stone-400">|</span>
+                            
+                            <span className="text-[10px] text-stone-500 font-mono">
+                              Limit: ₹{record.profile.maxBudget} INR
+                            </span>
                           </div>
 
-                          {/* Cost and timeline operations */}
-                          <div className="flex md:flex-col items-center md:items-end justify-between md:justify-center shrink-0 border-t md:border-t-0 pt-3 md:pt-0 border-stone-100 gap-3">
-                            <div className="text-left md:text-right">
-                              <span className="text-[10px] text-stone-400 block uppercase font-bold tracking-wider">Plan Total Cost</span>
-                              <span className="text-base font-mono font-extrabold text-stone-900">₹{totalHistoricalCost}</span>
+                          {/* Meals loaded summary */}
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1 border-t border-stone-100">
+                            <div className="space-y-0.5">
+                              <span className="text-[9px] font-bold uppercase tracking-wider text-amber-600 block">🍳 Breakfast</span>
+                              <span className="text-xs font-bold text-stone-800 line-clamp-1">{breakfast.name}</span>
+                              <span className="text-[10px] text-stone-400 font-mono">₹{breakfast.cost} | {breakfast.prepTime}m</span>
                             </div>
-
-                            <div className="flex items-center gap-1.5">
-                              <button
-                                type="button"
-                                onClick={(e) => handleDeleteHistoryRecord(record.id, e)}
-                                className="p-2 text-stone-400 hover:text-rose-600 bg-stone-50 hover:bg-rose-50 border border-stone-200 hover:border-rose-100 rounded-lg transition"
-                                title="Delete historical plan"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
-                              
-                              <button
-                                type="button"
-                                className="inline-flex items-center gap-1 text-xs font-bold bg-stone-900 hover:bg-stone-800 text-white py-1.5 px-3 rounded-lg transition"
-                              >
-                                Load Plan <ArrowRight className="w-3 h-3 text-amber-400" />
-                              </button>
+                            <div className="space-y-0.5">
+                              <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-600 block">🥗 Lunch</span>
+                              <span className="text-xs font-bold text-stone-800 line-clamp-1">{lunch.name}</span>
+                              <span className="text-[10px] text-stone-400 font-mono">₹{lunch.cost} | {lunch.prepTime}m</span>
+                            </div>
+                            <div className="space-y-0.5">
+                              <span className="text-[9px] font-bold uppercase tracking-wider text-indigo-600 block">🍲 Dinner</span>
+                              <span className="text-xs font-bold text-stone-800 line-clamp-1">{dinner.name}</span>
+                              <span className="text-[10px] text-stone-400 font-mono">₹{dinner.cost} | {dinner.prepTime}m</span>
                             </div>
                           </div>
+                        </div>
 
-                        </motion.div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
+                        {/* Cost and timeline operations */}
+                        <div className="flex md:flex-col items-center md:items-end justify-between md:justify-center shrink-0 border-t md:border-t-0 pt-3 md:pt-0 border-stone-100 gap-3">
+                          <div className="text-left md:text-right">
+                            <span className="text-[10px] text-stone-400 block uppercase font-bold tracking-wider">Plan Total Cost</span>
+                            <span className="text-base font-mono font-extrabold text-stone-900">₹{totalHistoricalCost}</span>
+                          </div>
 
-          </div>
+                          <div className="flex items-center gap-1.5">
+                            <button
+                              type="button"
+                              onClick={(e) => handleDeleteHistoryRecord(record.id, e)}
+                              className="p-2 text-stone-400 hover:text-rose-600 bg-stone-50 hover:bg-rose-50 border border-stone-200 hover:border-rose-100 rounded-lg transition"
+                              title="Delete historical plan"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                            
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1 text-xs font-bold bg-stone-900 hover:bg-stone-800 text-white py-1.5 px-3 rounded-lg transition"
+                            >
+                              Load Plan <ArrowRight className="w-3 h-3 text-amber-400" />
+                            </button>
+                          </div>
+                        </div>
 
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
       </main>
