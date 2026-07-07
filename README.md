@@ -1,6 +1,6 @@
-# RasoiCraft: AI-Powered Indian Meal Planner & Prep Optimizer
+# VibeChef: AI-Powered Indian Meal Planner & Prep Optimizer
 
-RasoiCraft is a high-performance, single-screen responsive web application designed to help households plan healthy, budget-friendly daily Indian meals. It empowers users to optimize their kitchen prep time, coordinate meals around active physical stamina/energy levels, and maximize their current pantry inventory.
+VibeChed is a high-performance, single-screen responsive web application designed to help households plan healthy, budget-friendly daily Indian meals. It empowers users to optimize their kitchen prep time, coordinate meals around active physical stamina/energy levels, and maximize their current pantry inventory.
 
 The application features a hybrid full-stack architecture with two powerful planner modes:
 1. **AI Personal Chef (Bespoke Gemini Mode):** Curates custom meals mathematically aligned to your ingredients and time parameters.
