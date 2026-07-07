@@ -1,1 +1,813 @@
-[]
+[
+  {
+    "id": "hist_1783435256302_ppbgu405s",
+    "createdAt": "2026-07-07T14:40:56.302Z",
+    "profile": {
+      "timeBreakfast": 15,
+      "timeLunch": 25,
+      "timeDinner": 35,
+      "energyLevel": 3,
+      "ingredientsToUse": [
+        "Eggs",
+        "Potatoes (Aloo)",
+        "Onions (Pyaz)",
+        "chicken"
+      ],
+      "maxBudget": 600
+    },
+    "plan": {
+      "mealPlan": {
+        "breakfast": {
+          "name": "Masaledar Anda Bhurji with Toasted Bread",
+          "prepTime": 12,
+          "energyScore": 2,
+          "cost": 40,
+          "description": "A quick and spicy Indian-style scrambled eggs, packed with flavors from onions, green chilies, and basic spices. Served with crisp, lightly toasted whole wheat bread, it's a hearty and low-effort start to your day, perfectly using up those pantry eggs and onions.",
+          "ingredients": [
+            {
+              "name": "Eggs",
+              "amount": "2 large",
+              "category": "Dairy & Eggs"
+            },
+            {
+              "name": "Onion",
+              "amount": "1 small, finely chopped",
+              "category": "Produce"
+            },
+            {
+              "name": "Green Chili",
+              "amount": "1, finely chopped (adjust to taste)",
+              "category": "Produce"
+            },
+            {
+              "name": "Coriander Leaves",
+              "amount": "1 tbsp, chopped",
+              "category": "Produce"
+            },
+            {
+              "name": "Cooking Oil",
+              "amount": "1 tsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Cumin Seeds",
+              "amount": "1/4 tsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Turmeric Powder",
+              "amount": "1/4 tsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Red Chili Powder",
+              "amount": "1/4 tsp (optional)",
+              "category": "Pantry"
+            },
+            {
+              "name": "Salt",
+              "amount": "to taste",
+              "category": "Pantry"
+            },
+            {
+              "name": "Whole Wheat Bread",
+              "amount": "2 slices",
+              "category": "Bakery"
+            }
+          ],
+          "instructions": [
+            "Heat oil in a non-stick pan over medium heat. Add cumin seeds and let them splutter.",
+            "Add chopped onion and green chili. Sauté until onions turn translucent, about 3-4 minutes.",
+            "Add turmeric powder, red chili powder (if using), and salt. Cook for 30 seconds.",
+            "Crack eggs directly into the pan or whisk them lightly in a bowl before adding. Scramble continuously until cooked through but still moist.",
+            "Stir in chopped coriander leaves. Remove from heat.",
+            "Lightly toast the whole wheat bread. Serve the Anda Bhurji hot with the toasted bread."
+          ]
+        },
+        "lunch": {
+          "name": "Comforting Jeera Rice with Aloo Pyaz ki Sukhi Sabzi",
+          "prepTime": 25,
+          "energyScore": 2,
+          "cost": 64,
+          "description": "A classic, homely combination featuring fragrant Jeera Rice and a simple, dry stir-fry of potatoes and onions. The sabzi is spiced lightly for comfort, with a hint of tang from amchur. This meal efficiently utilizes your potatoes and onions, offering a satisfying and quick lunch.",
+          "ingredients": [
+            {
+              "name": "Basmati Rice",
+              "amount": "1 cup (approx. 180g)",
+              "category": "Grains & Lentils"
+            },
+            {
+              "name": "Potatoes (Aloo)",
+              "amount": "2 medium, peeled and diced",
+              "category": "Produce"
+            },
+            {
+              "name": "Onion (Pyaz)",
+              "amount": "1 large, finely chopped",
+              "category": "Produce"
+            },
+            {
+              "name": "Cooking Oil",
+              "amount": "1 tbsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Cumin Seeds",
+              "amount": "1 tsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Turmeric Powder",
+              "amount": "1/2 tsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Red Chili Powder",
+              "amount": "1/2 tsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Coriander Powder",
+              "amount": "1 tsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Amchur Powder (Dry Mango Powder)",
+              "amount": "1/2 tsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Salt",
+              "amount": "to taste",
+              "category": "Pantry"
+            },
+            {
+              "name": "Coriander Leaves",
+              "amount": "1 tbsp, chopped (for garnish)",
+              "category": "Produce"
+            },
+            {
+              "name": "Water",
+              "amount": "2 cups (for rice)",
+              "category": "Pantry"
+            }
+          ],
+          "instructions": [
+            "Wash rice thoroughly and soak for 15 minutes while you prep. Drain.",
+            "For Jeera Rice: In a small pot, heat 1/2 tsp oil. Add 1/2 tsp cumin seeds, let splutter. Add drained rice and 2 cups water, salt to taste. Bring to a boil, then reduce heat, cover, and cook for 12-15 minutes until water is absorbed and rice is tender.",
+            "For Aloo Pyaz Sabzi: Heat remaining oil in a pan. Add remaining cumin seeds, let them splutter.",
+            "Add chopped onion and sauté until golden brown, about 5-7 minutes.",
+            "Add diced potatoes, turmeric powder, red chili powder, coriander powder, and salt. Mix well.",
+            "Cover the pan and cook on low heat, stirring occasionally, until potatoes are tender (about 10-12 minutes). If sticking, add a splash of water.",
+            "Once potatoes are cooked, add amchur powder and mix well. Sauté for another 2 minutes without lid until slightly crispy.",
+            "Garnish sabzi with fresh coriander leaves. Serve hot with Jeera Rice."
+          ]
+        },
+        "dinner": {
+          "name": "Quick Home-style Chicken Curry with Steamed Rice",
+          "prepTime": 35,
+          "energyScore": 3,
+          "cost": 207,
+          "description": "A rustic and flavorful chicken curry cooked in a fragrant onion-tomato gravy, perfect for a cozy dinner. This recipe focuses on fresh spices and quick preparation to fit your time constraints, ensuring a tender and delicious chicken dish that makes the most of your chicken and onions.",
+          "ingredients": [
+            {
+              "name": "Chicken",
+              "amount": "300g, cut into small pieces",
+              "category": "Meat & Seafood"
+            },
+            {
+              "name": "Onion (Pyaz)",
+              "amount": "1 large, finely chopped",
+              "category": "Produce"
+            },
+            {
+              "name": "Tomatoes",
+              "amount": "2 medium, finely chopped or pureed",
+              "category": "Produce"
+            },
+            {
+              "name": "Ginger-Garlic Paste",
+              "amount": "1 tbsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Cooking Oil",
+              "amount": "2 tbsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Cumin Seeds",
+              "amount": "1/2 tsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Bay Leaf",
+              "amount": "1",
+              "category": "Pantry"
+            },
+            {
+              "name": "Turmeric Powder",
+              "amount": "1/2 tsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Red Chili Powder",
+              "amount": "1 tsp (adjust to taste)",
+              "category": "Pantry"
+            },
+            {
+              "name": "Coriander Powder",
+              "amount": "1 tbsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Garam Masala",
+              "amount": "1/2 tsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Salt",
+              "amount": "to taste",
+              "category": "Pantry"
+            },
+            {
+              "name": "Water",
+              "amount": "1 cup (for gravy)",
+              "category": "Pantry"
+            },
+            {
+              "name": "Coriander Leaves",
+              "amount": "2 tbsp, chopped (for garnish)",
+              "category": "Produce"
+            },
+            {
+              "name": "Basmati Rice",
+              "amount": "1 cup (approx. 180g)",
+              "category": "Grains & Lentils"
+            },
+            {
+              "name": "Water",
+              "amount": "2 cups (for rice)",
+              "category": "Pantry"
+            }
+          ],
+          "instructions": [
+            "Wash and drain chicken pieces. Season with a pinch of salt and turmeric powder.",
+            "Heat oil in a heavy-bottomed pan or kadai over medium-high heat. Add cumin seeds and bay leaf; let them splutter.",
+            "Add chopped onion and sauté until deep golden brown, about 7-9 minutes. This step is crucial for flavor.",
+            "Add ginger-garlic paste and sauté for 1-2 minutes until the raw smell disappears.",
+            "Add chopped tomatoes (or puree) and cook, stirring frequently, until the tomatoes soften and oil starts to separate, about 5-7 minutes.",
+            "Stir in turmeric powder, red chili powder, coriander powder, and salt. Cook for 2 minutes, adding a splash of water if the masala sticks.",
+            "Add the seasoned chicken pieces to the pan. Mix well, ensuring chicken is coated with the masala. Cook for 5-7 minutes on medium-high heat, stirring occasionally, until chicken changes color.",
+            "Pour in 1 cup of water, bring to a simmer. Cover the pan and cook on low heat for 10-12 minutes, or until chicken is tender and cooked through.",
+            "While curry cooks, wash rice thoroughly. In a separate pot, add rice and 2 cups water, a pinch of salt. Bring to a boil, reduce heat, cover, and cook for 12-15 minutes until water is absorbed and rice is tender.",
+            "Once chicken is cooked, stir in garam masala. Garnish with fresh coriander leaves.",
+            "Serve hot with steamed Basmati rice."
+          ]
+        }
+      },
+      "cookingTodoList": [
+        {
+          "time": "08:00 AM",
+          "mealType": "breakfast",
+          "instruction": "Finely chop 1 small onion and 1 green chili for Anda Bhurji. Chop 1 tbsp coriander leaves for garnish."
+        },
+        {
+          "time": "08:05 AM",
+          "mealType": "breakfast",
+          "instruction": "Start cooking Anda Bhurji in a pan. Simultaneously, toast 2 slices of whole wheat bread."
+        },
+        {
+          "time": "08:15 AM",
+          "mealType": "breakfast",
+          "instruction": "Serve Masaledar Anda Bhurji with Toasted Bread."
+        },
+        {
+          "time": "12:00 PM",
+          "mealType": "lunch",
+          "instruction": "Wash 1 cup Basmati Rice and soak for 15 minutes. In parallel, dice 2 medium potatoes and finely chop 1 large onion for Aloo Pyaz ki Sabzi. Chop 1 tbsp coriander leaves for garnish."
+        },
+        {
+          "time": "12:05 PM",
+          "mealType": "lunch",
+          "instruction": "Drain soaked rice. Start cooking Jeera Rice in a small pot. Begin preparing Aloo Pyaz ki Sabzi in a separate pan."
+        },
+        {
+          "time": "12:25 PM",
+          "mealType": "lunch",
+          "instruction": "Finish cooking and serve Comforting Jeera Rice with Aloo Pyaz ki Sukhi Sabzi."
+        },
+        {
+          "time": "07:00 PM",
+          "mealType": "dinner",
+          "instruction": "Finely chop 1 large onion and 2 medium tomatoes for Chicken Curry. Prepare 1 tbsp ginger-garlic paste (or finely mince ginger and garlic). Cut 300g chicken into small pieces. Chop 2 tbsp coriander leaves for garnish. Wash 1 cup Basmati Rice."
+        },
+        {
+          "time": "07:10 PM",
+          "mealType": "dinner",
+          "instruction": "Start cooking Home-style Chicken Curry in a heavy-bottomed pan, focusing on browning onions and cooking masala."
+        },
+        {
+          "time": "07:30 PM",
+          "mealType": "dinner",
+          "instruction": "While the chicken curry simmers, start cooking Steamed Rice in a separate pot."
+        },
+        {
+          "time": "07:45 PM",
+          "mealType": "dinner",
+          "instruction": "Finish cooking and serve Quick Home-style Chicken Curry with Steamed Rice."
+        }
+      ],
+      "groceryList": [
+        {
+          "category": "Produce",
+          "items": [
+            {
+              "name": "Green Chilies",
+              "amount": "50g",
+              "estimatedPrice": 10,
+              "substitution": "Dried red chilies (crushed)"
+            },
+            {
+              "name": "Coriander Leaves",
+              "amount": "1 bunch",
+              "estimatedPrice": 20,
+              "substitution": "Mint leaves or dried fenugreek leaves (Kasoori Methi)"
+            },
+            {
+              "name": "Tomatoes",
+              "amount": "2 medium",
+              "estimatedPrice": 15,
+              "substitution": "Tomato puree (2-3 tbsp) or canned diced tomatoes"
+            },
+            {
+              "name": "Ginger",
+              "amount": "50g",
+              "estimatedPrice": 10,
+              "substitution": "Ginger powder"
+            },
+            {
+              "name": "Garlic",
+              "amount": "1 whole bulb",
+              "estimatedPrice": 10,
+              "substitution": "Garlic powder"
+            }
+          ]
+        },
+        {
+          "category": "Pantry",
+          "items": [
+            {
+              "name": "Cumin Seeds",
+              "amount": "50g packet",
+              "estimatedPrice": 20,
+              "substitution": "Cumin powder (use half the amount)"
+            },
+            {
+              "name": "Coriander Powder",
+              "amount": "50g packet",
+              "estimatedPrice": 20,
+              "substitution": "Cumin powder (if no other option, alter flavor)"
+            },
+            {
+              "name": "Garam Masala",
+              "amount": "20g packet",
+              "estimatedPrice": 25,
+              "substitution": "Kitchen King Masala"
+            },
+            {
+              "name": "Amchur Powder (Dry Mango Powder)",
+              "amount": "20g packet",
+              "estimatedPrice": 15,
+              "substitution": "Lemon juice (a dash) or tamarind paste (small amount)"
+            },
+            {
+              "name": "Bay Leaf",
+              "amount": "1 small packet (approx. 5-6 leaves)",
+              "estimatedPrice": 10,
+              "substitution": "Green Cardamom pod (very small amount, for aroma)"
+            }
+          ]
+        },
+        {
+          "category": "Grains & Lentils",
+          "items": [
+            {
+              "name": "Basmati Rice",
+              "amount": "500g packet",
+              "estimatedPrice": 50,
+              "substitution": "Any long-grain rice like Sona Masuri or Kolam rice"
+            }
+          ]
+        },
+        {
+          "category": "Bakery",
+          "items": [
+            {
+              "name": "Whole Wheat Bread",
+              "amount": "1 small loaf (approx. 8 slices)",
+              "estimatedPrice": 40,
+              "substitution": "Roti/Chapati or a simple Paratha"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "hist_1783435133086_ga3czywwt",
+    "createdAt": "2026-07-07T14:38:53.086Z",
+    "profile": {
+      "timeBreakfast": 15,
+      "timeLunch": 25,
+      "timeDinner": 35,
+      "energyLevel": 3,
+      "ingredientsToUse": [
+        "Eggs",
+        "Potatoes (Aloo)",
+        "Onions (Pyaz)"
+      ],
+      "maxBudget": 300
+    },
+    "plan": {
+      "mealPlan": {
+        "breakfast": {
+          "name": "Zesty Masala Anda Bhurji",
+          "prepTime": 12,
+          "energyScore": 2,
+          "cost": 31,
+          "description": "A vibrant and quick Indian-style scrambled eggs, packed with the fresh punch of finely chopped onions and green chilies, seasoned with turmeric and a hint of red chili. Perfect for a speedy, protein-rich start to your day.",
+          "ingredients": [
+            {
+              "name": "Eggs",
+              "amount": "2",
+              "category": "Dairy & Eggs"
+            },
+            {
+              "name": "Onion",
+              "amount": "1 small",
+              "category": "Produce"
+            },
+            {
+              "name": "Green Chili",
+              "amount": "1",
+              "category": "Produce"
+            },
+            {
+              "name": "Coriander Leaves",
+              "amount": "1 tbsp, chopped",
+              "category": "Produce"
+            },
+            {
+              "name": "Turmeric Powder",
+              "amount": "1/4 tsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Red Chili Powder",
+              "amount": "1/4 tsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Salt",
+              "amount": "To taste",
+              "category": "Pantry"
+            },
+            {
+              "name": "Oil",
+              "amount": "1 tsp",
+              "category": "Pantry"
+            }
+          ],
+          "instructions": [
+            "Finely chop the onion and green chili.",
+            "Heat oil in a non-stick pan over medium heat. Add chopped onions and green chilies, sauté until translucent, about 2-3 minutes.",
+            "Crack eggs into a bowl, add turmeric powder, red chili powder, and salt. Whisk lightly.",
+            "Pour the egg mixture into the pan with the sautéed onions.",
+            "Scramble the eggs with a spatula, stirring continuously until cooked through but still moist, about 3-4 minutes.",
+            "Garnish with fresh coriander leaves and serve immediately."
+          ]
+        },
+        "lunch": {
+          "name": "Rustic Aloo Pyaz Sabzi with Fluffy Steamed Rice",
+          "prepTime": 22,
+          "energyScore": 2,
+          "cost": 68,
+          "description": "A simple yet profoundly satisfying dry potato and onion stir-fry, seasoned with everyday Indian spices like turmeric, red chili, and cumin. Paired with fluffy steamed rice, it's the epitome of comforting home-cooked Indian food – easy to make, light on the stomach, and rich in traditional flavors.",
+          "ingredients": [
+            {
+              "name": "Potatoes (Aloo)",
+              "amount": "2 medium",
+              "category": "Produce"
+            },
+            {
+              "name": "Onion (Pyaz)",
+              "amount": "1 medium",
+              "category": "Produce"
+            },
+            {
+              "name": "Basmati Rice",
+              "amount": "1 cup",
+              "category": "Grains & Lentils"
+            },
+            {
+              "name": "Cumin Seeds (Jeera)",
+              "amount": "1 tsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Turmeric Powder",
+              "amount": "1/2 tsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Red Chili Powder",
+              "amount": "1/2 tsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Coriander Powder",
+              "amount": "1 tsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Salt",
+              "amount": "To taste",
+              "category": "Pantry"
+            },
+            {
+              "name": "Oil",
+              "amount": "1 tbsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Water",
+              "amount": "2 cups (for rice)",
+              "category": "Pantry"
+            }
+          ],
+          "instructions": [
+            "Wash and soak rice for 10 minutes. In parallel, peel and dice potatoes into small cubes. Thinly slice the onion.",
+            "For rice: Bring 2 cups of water to a boil in a pot. Add soaked and drained rice, a pinch of salt. Cover and simmer on low heat for 15-18 minutes until water is absorbed and rice is cooked.",
+            "For sabzi: Heat oil in a separate pan over medium heat. Add cumin seeds and let them splutter.",
+            "Add sliced onions and sauté until golden brown, about 3-4 minutes.",
+            "Add diced potatoes, turmeric powder, red chili powder, coriander powder, and salt. Mix well.",
+            "Cover the pan and cook on low-medium heat, stirring occasionally, until potatoes are tender, about 10-12 minutes. Add a splash of water if sticking.",
+            "Once potatoes are cooked, increase heat slightly and stir-fry for 2-3 minutes until slightly crisp.",
+            "Serve hot with steamed rice."
+          ]
+        },
+        "dinner": {
+          "name": "Hearty Aloo Matar Pulao with Cooling Dahi",
+          "prepTime": 32,
+          "energyScore": 3,
+          "cost": 113,
+          "description": "A fragrant and flavorful one-pot rice dish, featuring tender potatoes and sweet green peas cooked with aromatic whole spices like bay leaf and cinnamon, along with a hint of ginger-garlic. This wholesome pulao is a complete meal in itself, perfectly balanced with a side of cooling fresh curd.",
+          "ingredients": [
+            {
+              "name": "Basmati Rice",
+              "amount": "1 cup",
+              "category": "Grains & Lentils"
+            },
+            {
+              "name": "Potatoes (Aloo)",
+              "amount": "1 large",
+              "category": "Produce"
+            },
+            {
+              "name": "Green Peas (Matar)",
+              "amount": "1/2 cup",
+              "category": "Produce"
+            },
+            {
+              "name": "Onion",
+              "amount": "1 medium",
+              "category": "Produce"
+            },
+            {
+              "name": "Ginger-Garlic Paste",
+              "amount": "1 tsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Bay Leaf",
+              "amount": "1",
+              "category": "Pantry"
+            },
+            {
+              "name": "Cinnamon Stick",
+              "amount": "1 inch piece",
+              "category": "Pantry"
+            },
+            {
+              "name": "Cloves",
+              "amount": "2-3",
+              "category": "Pantry"
+            },
+            {
+              "name": "Green Cardamom",
+              "amount": "1",
+              "category": "Pantry"
+            },
+            {
+              "name": "Turmeric Powder",
+              "amount": "1/4 tsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Garam Masala",
+              "amount": "1/2 tsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Salt",
+              "amount": "To taste",
+              "category": "Pantry"
+            },
+            {
+              "name": "Oil/Ghee",
+              "amount": "1 tbsp",
+              "category": "Pantry"
+            },
+            {
+              "name": "Water",
+              "amount": "2 cups",
+              "category": "Pantry"
+            },
+            {
+              "name": "Fresh Curd (Dahi)",
+              "amount": "1/2 cup",
+              "category": "Dairy & Eggs"
+            }
+          ],
+          "instructions": [
+            "Wash and soak basmati rice for 20 minutes. Peel and dice potato into medium cubes. Slice onion thinly.",
+            "Heat oil or ghee in a heavy-bottomed pot or pressure cooker over medium heat.",
+            "Add bay leaf, cinnamon stick, cloves, and green cardamom. Sauté for 30 seconds until fragrant.",
+            "Add sliced onions and sauté until golden brown, about 4-5 minutes.",
+            "Add ginger-garlic paste and sauté for another minute until the raw smell disappears.",
+            "Add diced potatoes and green peas. Cook for 2-3 minutes.",
+            "Stir in turmeric powder, garam masala, and salt. Mix well.",
+            "Drain the soaked rice and add it to the pot. Gently mix with the vegetables for 1 minute.",
+            "Pour in 2 cups of water. Bring to a boil, then reduce heat to low, cover tightly, and cook for 15-18 minutes until water is absorbed and rice is tender. If using a pressure cooker, cook for 1 whistle on medium heat, then let pressure release naturally.",
+            "Fluff the pulao gently with a fork. Serve hot with fresh curd."
+          ]
+        }
+      },
+      "cookingTodoList": [
+        {
+          "time": "08:00 AM",
+          "mealType": "breakfast",
+          "instruction": "Chop 1 small onion and 1 green chili for Anda Bhurji."
+        },
+        {
+          "time": "08:05 AM",
+          "mealType": "breakfast",
+          "instruction": "Heat oil in a pan, add chopped onions and green chilies, sauté until translucent (2-3 min)."
+        },
+        {
+          "time": "08:08 AM",
+          "mealType": "breakfast",
+          "instruction": "Whisk eggs with turmeric, red chili powder, and salt. Pour into the pan."
+        },
+        {
+          "time": "08:10 AM",
+          "mealType": "breakfast",
+          "instruction": "Scramble eggs continuously until cooked through (3-4 min)."
+        },
+        {
+          "time": "08:14 AM",
+          "mealType": "breakfast",
+          "instruction": "Garnish with fresh coriander leaves. Serve."
+        },
+        {
+          "time": "12:00 PM",
+          "mealType": "lunch",
+          "instruction": "Wash and soak 1 cup Basmati rice. Peel and dice 2 medium potatoes into small cubes. Thinly slice 1 medium onion."
+        },
+        {
+          "time": "12:10 PM",
+          "mealType": "lunch",
+          "instruction": "Start cooking rice: bring 2 cups water to boil, add drained rice and pinch of salt, cover and simmer (15-18 min)."
+        },
+        {
+          "time": "12:10 PM",
+          "mealType": "lunch",
+          "instruction": "In a separate pan, heat oil, add cumin seeds and let them splutter (1 min)."
+        },
+        {
+          "time": "12:11 PM",
+          "mealType": "lunch",
+          "instruction": "Add sliced onions to pan and sauté until golden brown (3-4 min)."
+        },
+        {
+          "time": "12:15 PM",
+          "mealType": "lunch",
+          "instruction": "Add diced potatoes, turmeric, red chili, coriander powder, and salt. Mix well (2 min)."
+        },
+        {
+          "time": "12:17 PM",
+          "mealType": "lunch",
+          "instruction": "Cover the pan and cook on low-medium heat, stirring occasionally, until potatoes are tender (10-12 min)."
+        },
+        {
+          "time": "12:29 PM",
+          "mealType": "lunch",
+          "instruction": "Increase heat slightly, stir-fry potatoes for 2-3 minutes until slightly crisp. Serve with steamed rice."
+        },
+        {
+          "time": "07:00 PM",
+          "mealType": "dinner",
+          "instruction": "Wash and soak 1 cup Basmati rice (for 20 mins). Peel and dice 1 large potato. Slice 1 medium onion. Measure 1/2 cup green peas."
+        },
+        {
+          "time": "07:20 PM",
+          "mealType": "dinner",
+          "instruction": "Heat oil/ghee in a heavy-bottomed pot. Add bay leaf, cinnamon stick, cloves, green cardamom, sauté (30 sec)."
+        },
+        {
+          "time": "07:21 PM",
+          "mealType": "dinner",
+          "instruction": "Add sliced onions and sauté until golden brown (4-5 min)."
+        },
+        {
+          "time": "07:26 PM",
+          "mealType": "dinner",
+          "instruction": "Add ginger-garlic paste and sauté for 1 minute."
+        },
+        {
+          "time": "07:27 PM",
+          "mealType": "dinner",
+          "instruction": "Add diced potatoes and green peas. Cook for 2-3 minutes."
+        },
+        {
+          "time": "07:30 PM",
+          "mealType": "dinner",
+          "instruction": "Stir in turmeric powder, garam masala, and salt. Mix well (1 min)."
+        },
+        {
+          "time": "07:31 PM",
+          "mealType": "dinner",
+          "instruction": "Drain soaked rice, add to pot, and gently mix with vegetables (1 min)."
+        },
+        {
+          "time": "07:32 PM",
+          "mealType": "dinner",
+          "instruction": "Pour in 2 cups of water. Bring to a boil, then reduce heat to low, cover, and cook until water is absorbed and rice is tender (15-18 min)."
+        },
+        {
+          "time": "07:50 PM",
+          "mealType": "dinner",
+          "instruction": "Fluff the pulao gently with a fork. Serve hot with fresh curd."
+        }
+      ],
+      "groceryList": [
+        {
+          "category": "Produce",
+          "items": [
+            {
+              "name": "Green Chili",
+              "amount": "1 piece",
+              "estimatedPrice": 2,
+              "substitution": "Dry Red Chili"
+            },
+            {
+              "name": "Coriander Leaves",
+              "amount": "1 small bunch",
+              "estimatedPrice": 10,
+              "substitution": "Dried Mint"
+            },
+            {
+              "name": "Green Peas (frozen or fresh)",
+              "amount": "200g pack",
+              "estimatedPrice": 20,
+              "substitution": "Paneer cubes or Cauliflower florets"
+            }
+          ]
+        },
+        {
+          "category": "Grains & Lentils",
+          "items": [
+            {
+              "name": "Basmati Rice",
+              "amount": "500g",
+              "estimatedPrice": 75,
+              "substitution": "Sona Masoori Rice"
+            }
+          ]
+        },
+        {
+          "category": "Dairy & Eggs",
+          "items": [
+            {
+              "name": "Fresh Curd (Dahi)",
+              "amount": "200g pack",
+              "estimatedPrice": 25,
+              "substitution": "Lemon juice for tang (not a direct substitute)"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]
