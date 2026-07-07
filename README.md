@@ -36,7 +36,7 @@ The application features a hybrid full-stack architecture with two powerful plan
 *   **Styling:** Tailwind CSS (Modern `@import "tailwindcss";` setup)
 *   **Animations:** Framer Motion (`motion/react`) for fluid transitions, layout morphing, and progress loaders
 *   **Icons:** Lucide React
-*   **Server/API Hosting (Optional):** Express Server proxying Google's @google/genai SDK safely for Gemini server-side operations
+*   **Server/API Hosting:** Express Server proxying Google's `@google/genai` SDK safely for server-side operations, or direct serverless integration with the Gemini API via the browser.
 
 ---
 
@@ -44,8 +44,8 @@ The application features a hybrid full-stack architecture with two powerful plan
 
 1.  **Clone the Repository:**
     ```bash
-    git clone <your-github-repo-url>
-    cd <your-repo-folder>
+    git clone https://github.com/AnishAaron/VibeChef.git
+    cd VibeChef
     ```
 
 2.  **Install Dependencies:**
@@ -53,13 +53,14 @@ The application features a hybrid full-stack architecture with two powerful plan
     npm install
     ```
 
-3.  **Configure Environment Variables:**
-    Create a `.env` file in the root directory:
-    ```env
-    GEMINI_API_KEY=your_actual_api_key_here
-    ```
+3.  **Configure Environment (Choose one):**
+    *   **Backend Server Mode**: Create a `.env` file in the root directory:
+        ```env
+        GEMINI_API_KEY=your_actual_api_key_here
+        ```
+    *   **Browser Serverless Mode**: Run the app and click the **"Set Gemini Key"** button in the top-right header to configure it directly in your browser.
 
-4.  **Run Dev Server (Full-Stack mode):**
+4.  **Run Development Server:**
     ```bash
     npm run dev
     ```
@@ -68,5 +69,24 @@ The application features a hybrid full-stack architecture with two powerful plan
 5.  **Build and Start in Production:**
     ```bash
     npm run build
-    npm run start
     ```
+    To start the production server (in PowerShell):
+    ```powershell
+    $env:NODE_ENV="production"; npm run start
+    ```
+
+---
+
+## 🌐 Deploying to GitHub Pages
+
+VibeChef supports serverless client-side execution out-of-the-box, allowing you to host the frontend on GitHub Pages for free while keeping your API key secure in your local storage.
+
+1.  **Deploy static build to GitHub Pages:**
+    ```bash
+    npm run deploy
+    ```
+2.  **Configure Pages settings on GitHub:**
+    *   Go to your repository **Settings > Pages**.
+    *   Set **Branch** to `gh-pages` and folder to `/ (root)`.
+    *   Click **Save**.
+3.  **Enter your API Key**: Open your live `github.io` URL, click **"Set Gemini Key"** in the top header, and paste your Gemini API Key. Your settings and timeline history will persist safely in your browser!
