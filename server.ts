@@ -326,8 +326,11 @@ async function startViteServer() {
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
-    app.get("*", (req, res) => {
+    app.use("/VibeChef", express.static(distPath));
+    app.get("/", (req, res) => {
+      res.redirect("/VibeChef/");
+    });
+    app.get("/VibeChef/*", (req, res) => {
       res.sendFile(path.join(distPath, "index.html"));
     });
   }
