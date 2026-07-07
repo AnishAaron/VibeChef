@@ -14,11 +14,13 @@ import {
   Activity,
   DollarSign,
   AlertCircle,
-  FolderSync
+  FolderSync,
+  Key
 } from 'lucide-react';
 import { UserProfile, DailyPlanResponse, HistoryRecord } from './types';
 import SidebarWizard from './components/SidebarWizard';
 import MealPlanner from './components/MealPlanner';
+import { generatePlanDirectlyFromBrowser } from './utils/gemini';
 
 const DEFAULT_PROFILE: UserProfile = {
   timeBreakfast: 15,
@@ -46,7 +48,12 @@ export default function App() {
   const [showApplyNotification, setShowApplyNotification] = useState(false);
   
   // New State variables for AI integration and DB history
-  const [apiKeyConfigured, setApiKeyConfigured] = useState(false);
+  const [userApiKey, setUserApiKey] = useState<string>(() => {
+    return localStorage.getItem('cooking_todo_user_api_key') || '';
+  });
+  const [backendApiKeyConfigured, setBackendApiKeyConfigured] = useState(false);
+  const apiKeyConfigured = !!userApiKey || backendApiKeyConfigured;
+
   const [history, setHistory] = useState<HistoryRecord[]>([]);
   const [currentPlan, setCurrentPlan] = useState<DailyPlanResponse | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -63,9 +70,12 @@ export default function App() {
     fetch("/api/health")
       .then(res => res.json())
       .then(data => {
-        setApiKeyConfigured(data.apiKeyConfigured);
+        setBackendApiKeyConfigured(data.apiKeyConfigured);
       })
-      .catch(err => console.error("Error verifying health API:", err));
+      .catch(err => {
+        console.warn("Could not verify health API. Using browser local settings.");
+        setBackendApiKeyConfigured(false);
+      });
 
     // 2. Fetch all user saved timeline records
     fetchHistory();
@@ -79,18 +89,30 @@ export default function App() {
         console.error("Error reading cached active plan:", e);
       }
     }
-  }, []);
+  }, [userApiKey]);
 
   const fetchHistory = async () => {
+    let serverHistory: HistoryRecord[] = [];
     try {
       const res = await fetch("/api/history");
       if (res.ok) {
-        const data = await res.json();
-        setHistory(data);
+        serverHistory = await res.json();
       }
     } catch (err) {
-      console.error("Error loading historical plans:", err);
+      console.warn("Could not load server timeline database. Static mode active.");
     }
+
+    const savedLocal = localStorage.getItem("cooking_todo_local_history");
+    const localHistoryList: HistoryRecord[] = savedLocal ? JSON.parse(savedLocal) : [];
+
+    const combined = [...localHistoryList];
+    serverHistory.forEach(sRec => {
+      if (!combined.some(c => c.id === sRec.id)) {
+        combined.push(sRec);
+      }
+    });
+    combined.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    setHistory(combined);
   };
 
   // Click on "Generate Daily Plan" in the sidebar wizard step 4
@@ -100,28 +122,56 @@ export default function App() {
     setActiveTab('planner');
 
     try {
-      const response = await fetch("/api/generate-plan", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ profile }),
-      });
+      let data: DailyPlanResponse;
 
-      const data = await response.json();
+      if (userApiKey) {
+        data = await generatePlanDirectlyFromBrowser(userApiKey, profile);
+      } else {
+        const response = await fetch("/api/generate-plan", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ profile }),
+        });
 
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to generate meal plan. Try configuring your secret API Key.");
+        const resJson = await response.json();
+
+        if (!response.ok) {
+          throw new Error(resJson.error || "Failed to generate meal plan. Try configuring your secret API Key.");
+        }
+        data = resJson;
       }
 
       // Success! Update active plan and persist to browser cache
       setCurrentPlan(data);
       localStorage.setItem("cooking_todo_active_plan", JSON.stringify(data));
 
-      // Save to server-side timeline database
-      await fetch("/api/history", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ profile, plan: data }),
-      });
+      const newRecord: HistoryRecord = {
+        id: `hist_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+        createdAt: new Date().toISOString(),
+        profile,
+        plan: data,
+      };
+
+      // 1. Try to save to server-side timeline database
+      let savedOnServer = false;
+      try {
+        const sRes = await fetch("/api/history", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ profile, plan: data }),
+        });
+        if (sRes.ok) {
+          savedOnServer = true;
+        }
+      } catch (e) {
+        console.warn("Server timeline save failed. Storing locally.");
+      }
+
+      // 2. Save locally
+      const savedLocal = localStorage.getItem("cooking_todo_local_history");
+      const localList: HistoryRecord[] = savedLocal ? JSON.parse(savedLocal) : [];
+      localList.unshift(newRecord);
+      localStorage.setItem("cooking_todo_local_history", JSON.stringify(localList));
 
       // Reload fresh database list
       fetchHistory();
@@ -189,16 +239,24 @@ export default function App() {
   const handleDeleteHistoryRecord = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation(); // prevent loading plan when clicking delete button
     if (window.confirm("Delete this plan from your user history timeline?")) {
+      // 1. Delete from local storage
+      const savedLocal = localStorage.getItem("cooking_todo_local_history");
+      if (savedLocal) {
+        const localList: HistoryRecord[] = JSON.parse(savedLocal);
+        const filtered = localList.filter(item => item.id !== id);
+        localStorage.setItem("cooking_todo_local_history", JSON.stringify(filtered));
+      }
+
+      // 2. Try to delete from server
       try {
-        const res = await fetch(`/api/history/${id}`, {
+        await fetch(`/api/history/${id}`, {
           method: "DELETE",
         });
-        if (res.ok) {
-          setHistory(prev => prev.filter(item => item.id !== id));
-        }
       } catch (err) {
-        console.error("Error deleting record:", err);
+        console.warn("Could not delete record from server database.");
       }
+
+      setHistory(prev => prev.filter(item => item.id !== id));
     }
   };
 
@@ -243,6 +301,31 @@ export default function App() {
               <RefreshCw className="w-3.5 h-3.5 text-stone-500" />
               <span className="hidden xs:inline">Reset All</span>
             </button>
+
+            {/* Custom Gemini Key Button */}
+            <button
+              onClick={() => {
+                const key = window.prompt("Enter your Google Gemini API Key:", userApiKey);
+                if (key !== null) {
+                  const trimmed = key.trim();
+                  setUserApiKey(trimmed);
+                  if (trimmed) {
+                    localStorage.setItem('cooking_todo_user_api_key', trimmed);
+                  } else {
+                    localStorage.removeItem('cooking_todo_user_api_key');
+                  }
+                }
+              }}
+              className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition cursor-pointer ${
+                userApiKey 
+                  ? 'bg-amber-100 text-amber-900 border border-amber-300 hover:bg-amber-200' 
+                  : 'bg-stone-100 text-stone-600 hover:bg-stone-200/80 hover:text-stone-950'
+              }`}
+              title={userApiKey ? "Click to change or remove browser Gemini API key" : "Configure client-side Gemini API key for GitHub Pages deployment"}
+            >
+              <Key className="w-3.5 h-3.5 text-amber-500" />
+              <span className="hidden xs:inline">{userApiKey ? "Gemini Key Configured" : "Set Gemini Key"}</span>
+            </button>
             
             <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-1 rounded-md border ${
               apiKeyConfigured 
@@ -252,7 +335,7 @@ export default function App() {
               {apiKeyConfigured ? (
                 <>
                   <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse" />
-                  AI Smart Mode Enabled
+                  AI Smart Mode Enabled {userApiKey ? "(Browser)" : "(Server)"}
                 </>
               ) : (
                 <>
